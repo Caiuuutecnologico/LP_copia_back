@@ -31,7 +31,7 @@ app.use(cors());
 
 // INICIALIZAÇÃO DO SERVIDOR
 app.listen(PORT, function () {
-  console.log(`Servidor rodando em http://localhost:${PORT}?utm_source=instagram&utm_medium=social&utm_campaign=lancamento`);
+  console.log(`Servidor rodando em http://localhost:${PORT}?utm_source=facebook&utm_medium=social&utm_campaign=lancamento`);
 });
 
 // CONFIGURAÇÃO PARA RODAR O FRONT NO SERVIDOR
@@ -128,4 +128,19 @@ try {
     return res.json({erro: "Problemas com o servidor"})
 }
 }
+);
+
+app.get('/contagem', async function(req, res) {
+    const query = `SELECT utm_source AS plataformas, COUNT(*) AS acessos FROM utms
+GROUP BY plataformas
+ORDER BY acessos DESC`;
+
+    try {
+      const result = await pool.query(query);
+      return res.json(result.rows);
+    } catch (erro) {
+      return res.json({erro: "Problemas com o servidor"})
+    }
+}
+
 );
